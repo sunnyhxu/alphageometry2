@@ -37,37 +37,89 @@ $ python -m test
 You will see the following output:
 
 ```
+We run the logical core DDAR on some easier IMO problems that can be solved by DDAR alone.
 
-We run the logical core DDAR on some challenging IMO problems, with manually
-provided auxiliary points. This is not a full AlphaGeometry system, only a
-test of the logical core.
+Problem: 2000_p1
+..... Proven :-)
+
+Problem: 2002_p2a
+.... Proven :-)
+
+Problem: 2002_p2b
+.... Proven :-)
+
+Problem: 2003_p4
+... Proven :-)
+
+Problem: 2004_p5
+... Proven :-)
+
+Problem: 2005_p5
+...... Proven :-)
+
+Problem: 2007_p4
+.... Proven :-)
+
+Problem: 2010_p4
+.... Proven :-)
+
+Problem: 2012_p1
+...... Proven :-)
+
+Problem: 2013_p4
+..... Proven :-)
+
+Problem: 2014_p4
+.... Proven :-)
+
+Problem: 2015_p4
+... Proven :-)
+
+Problem: 2016_p1
+..... Proven :-)
+
+Problem: 2017_p4
+..... Proven :-)
+
+Problem: 2022_p4
+..... Proven :-)
+
+
+We run the logical core DDAR on some challenging IMO problems, with manually provided
+auxiliary points. This is not a full AlphaGeometry system, only a test of the logical core.
 
 Problem: 2001_p5a
 ......... Proven :-)
+
 Problem: 2003_p4b
 ..... Proven :-)
+
 Problem: 2005_p1
 ...... Proven :-)
+
 Problem: 2008_p1b
 ........ Proven :-)
+
 Problem: 2008_p6
 ...... Proven :-)
+
 Problem: 2009_p4a
 ..... Proven :-)
+
 Problem: 2009_p4b
 ...... Proven :-)
+
 Problem: 2011_p6
 ...... Proven :-)
+
 Problem: 2013_p3
 ....... Proven :-)
-Problem: 2018_p6
-..... Proven :-)
+
 Problem: 2019_p2
 .... Proven :-)
+
 Problem: 2021_p3
 ......... Proven :-)
-Problem: 2023_p6
-....... Proven :-)
 ```
 
 ## Citing this work
