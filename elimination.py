@@ -48,8 +48,11 @@ class ElimRHS(ElimVar):
 class LinComb:
   """Linear combination of variables and constants."""
 
-  def __init__(self, d: dict[Any, fractions.Fraction]) -> None:
+  # Added sources=None to __init__
+  def __init__(self, d: dict[Any, fractions.Fraction], sources: set[Any] | None = None) -> None:
     self.d = d
+    # Track dependencies (ProofNodes) for this expression
+    self.sources = set() if sources is None else sources
 
   def iadd_mul(self, other: LinComb, coef: fractions.Fraction | int) -> None:
     """In-place add other * coef."""
@@ -57,6 +60,10 @@ class LinComb:
     coef = fractions.Fraction(coef)
     if coef == 0:
       return
+    
+    # Union sources when combining equations
+    self.sources.update(other.sources)
+
     for x, c2 in other.d.items():
       c1 = self.d.get(x, fractions.Fraction(0))
       c = c1 + c2 * coef
@@ -90,23 +97,27 @@ class LinComb:
     else:
       return LinComb(
           {x: c * coef for x, c in self.d.items()},
+          sources=self.sources.copy() 
       )
 
   def copy(self) -> LinComb:
-    return LinComb(dict(self.d))
+    # Copy sources
+    return LinComb(dict(self.d), sources=self.sources.copy())
 
   def __str__(self) -> str:
     parts = []
-    for x, c in self.d.items():
-      x = str(x)
+    items = sorted(self.d.items(), key=lambda kv: (isinstance(kv[0], ElimRHS), str(kv[0])))
+    # Sort for stable output: Variables first, then Constants (ElimRHS)
+    for x, c in items:
+      x_str = str(x)
       if c == 1:
-        parts.append(x)
-      elif c == 1:
-        parts.append(f"-{x}")
+        parts.append(x_str)
+      elif c == -1:
+        parts.append(f"-{x_str}")
       elif c.denominator == 1:
-        parts.append(f"{c.numerator}*{x}")
+        parts.append(f"{c.numerator}*{x_str}")
       else:
-        parts.append(f"{c.numerator}/{c.denominator}*{x}")
+        parts.append(f"{c.numerator}/{c.denominator}*{x_str}")
     if not parts:
       return "0"
     return " + ".join(parts)
@@ -240,6 +251,12 @@ class DistMul:
     self._value = None
     self._hash = None
 
+  def __str__(self):
+    return str(self.comb)
+  
+  def __repr__(self):
+    return str(self)
+
   @classmethod
   def frac_value(cls, frac_const: float | int | str) -> DistMul:
     """Produces a combination of prime logarithms equal to log(frac_const)."""
@@ -278,7 +295,8 @@ class DistMul:
         else:
           denominator *= x.value ** (-exp)
     coef = fractions.Fraction(numerator, denominator)
-    return DistMul(LinComb(normalized)), coef
+    # Propagate sources during normalization
+    return DistMul(LinComb(normalized, sources=self.comb.sources.copy())), coef
 
   def is_one(self) -> bool:
     return not self.comb.d
@@ -327,9 +345,12 @@ class ElimDistMul:
   def new_var(self, value: float, name: str) -> DistMul:
     return DistMul(LinComb.singleton(ElimLHS(value, name)))
 
-  def force_one(self, dist_mul: DistMul) -> bool:
+  # Added optional cause
+  def force_one(self, dist_mul: DistMul, cause: Any | None = None) -> bool:
     assert abs(dist_mul.value - 1.0) ** 2 < ng.ATOM, dist_mul.value
     comb = dist_mul.comb.copy()
+    if cause:
+        comb.sources.add(cause)
     return self.core.add_constraint(comb)
 
   def simplify(self, dist_mul: DistMul) -> DistMul:
@@ -354,6 +375,12 @@ class DistAdd:
     self._key = None
     self._value = None
     self._hash = None
+
+  def __str__(self) -> str:
+    return str(self.comb)
+  
+  def __repr__(self) -> str:
+    return str(self)
 
   def normalize(self) -> tuple[DistAdd, fractions.Fraction | int]:
     c = min(abs(c) for x, c in self.comb.d.items() if isinstance(x, ElimLHS))
@@ -406,9 +433,12 @@ class ElimDistAdd:
   def new_var(self, value: float, name: str) -> DistAdd:
     return DistAdd(LinComb.singleton(ElimLHS(value, name)))
 
-  def force_zero(self, dist_add: DistAdd) -> bool:
+  # Added optional cause
+  def force_zero(self, dist_add: DistAdd, cause: Any | None = None) -> bool:
     assert abs(dist_add.value) ** 2 < ng.ATOM
     comb = dist_add.comb.copy()
+    if cause:
+        comb.sources.add(cause)
     return self.core.add_constraint(comb)
 
   def simplify(self, dist_add: DistAdd) -> DistAdd:
@@ -449,6 +479,12 @@ class FormalAngle:
     self._key = None
     self._value = None
     self._hash = None
+
+  def __str__(self) -> str:
+    return str(self.comb)
+  
+  def __repr__(self) -> str:
+    return str(self)
 
   @property
   def value(self) -> float:
@@ -498,7 +534,8 @@ class ElimAngle:
   def new_var(self, value: float, name: str) -> FormalAngle:
     return FormalAngle(LinComb.singleton(ElimLHS(value, name)))
 
-  def force_zero(self, angle: FormalAngle) -> bool:
+  # Added optional cause
+  def force_zero(self, angle: FormalAngle, cause: Any | None = None) -> bool:
     assert abs((angle.value + 0.5) % 1 - 0.5) ** 2 < ng.ATOM, (
         abs((angle.value + 0.5) % 1 - 0.5) ** 2
     )
@@ -506,6 +543,8 @@ class ElimAngle:
     comb -= LinComb.singleton(
         angle_unit, fractions.Fraction(math.floor(angle.value + 0.5))
     )
+    if cause:
+        comb.sources.add(cause)
     return self.core.add_constraint(comb)
 
   def simplify(self, angle: FormalAngle) -> FormalAngle:

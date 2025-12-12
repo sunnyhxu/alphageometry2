@@ -499,6 +499,8 @@ def print_problem_and_solve(problems_dict: dict[str, str]) -> None:
     ddar.deduction_closure()
     if ddar.check_pred(problem.goal):
       print(" Proven :-)")
+      print("Proof steps:")
+      ddar.get_proof(problem.goal)
     else:
       print()
       print()
