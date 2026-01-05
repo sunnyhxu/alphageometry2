@@ -127,14 +127,14 @@ Problem: 2021_p3
 Please cite this work as:
 
 ```
-@misc{chervonyi2025goldmedalistperformancesolvingolympiad,
-      title={Gold-medalist Performance in Solving Olympiad Geometry with AlphaGeometry2},
-      author={Yuri Chervonyi and Trieu H. Trinh and Miroslav Olšák and Xiaomeng Yang and Hoang Nguyen and Marcelo Menegali and Junehyuk Jung and Vikas Verma and Quoc V. Le and Thang Luong},
-      year={2025},
-      eprint={2502.03544},
-      archivePrefix={arXiv},
-      primaryClass={cs.AI},
-      url={https://arxiv.org/abs/2502.03544},
+@article{chervonyi2025gold,
+  title={Gold-medalist performance in solving olympiad geometry with alphageometry2},
+  author={Chervonyi, Yuri and Trinh, Trieu H and Ol{\v{s}}{\'a}k, Miroslav and Yang, Xiaomeng and Nguyen, Hoang H and Menegali, Marcelo and Jung, Junehyuk and Kim, Junsu and Verma, Vikas and Le, Quoc V and others},
+  journal={Journal of Machine Learning Research},
+  volume={26},
+  number={241},
+  pages={1--39},
+  year={2025}
 }
 ```
 
