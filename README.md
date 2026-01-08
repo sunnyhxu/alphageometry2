@@ -5,6 +5,8 @@ introduced in [Trinh et al. (2024)](https://www.nature.com/articles/s41586-023-0
 which has now surpassed an average gold medalist in solving Olympiad geometry
 problems.
 
+**Update (Jan 2026):** The AG2 paper is published in [JMLR](https://www.jmlr.org/papers/v26/25-1654.html).
+
 This repository contains code necessary to reproduce solving some olympiad
 geometry problems (for example, IMO 2005 P1, IMO 2008 P6, IMO 2013 P3 and
 others).
@@ -127,14 +129,14 @@ Problem: 2021_p3
 Please cite this work as:
 
 ```
-@misc{chervonyi2025goldmedalistperformancesolvingolympiad,
-      title={Gold-medalist Performance in Solving Olympiad Geometry with AlphaGeometry2},
-      author={Yuri Chervonyi and Trieu H. Trinh and Miroslav Olšák and Xiaomeng Yang and Hoang Nguyen and Marcelo Menegali and Junehyuk Jung and Vikas Verma and Quoc V. Le and Thang Luong},
-      year={2025},
-      eprint={2502.03544},
-      archivePrefix={arXiv},
-      primaryClass={cs.AI},
-      url={https://arxiv.org/abs/2502.03544},
+@article{chervonyi2025gold,
+  title={Gold-medalist performance in solving olympiad geometry with alphageometry2},
+  author={Chervonyi, Yuri and Trinh, Trieu H and Ol{\v{s}}{\'a}k, Miroslav and Yang, Xiaomeng and Nguyen, Hoang H and Menegali, Marcelo and Jung, Junehyuk and Kim, Junsu and Verma, Vikas and Le, Quoc V and others},
+  journal={Journal of Machine Learning Research},
+  volume={26},
+  number={241},
+  pages={1--39},
+  year={2025}
 }
 ```
 
